@@ -1,38 +1,34 @@
+
 import 'package:flutter/material.dart';
 
-class ItemBoxes extends StatefulWidget {
+class ItemBoxes extends StatelessWidget {
   final String image;
   final String title;
+  final int price;
 
-  const ItemBoxes({super.key, required this.image, required this.title});
+  const ItemBoxes({super.key, required this.image, required this.title, required this.price});
 
-  @override
-  State<ItemBoxes> createState() => _ItemBoxesState();
-}
-
-class _ItemBoxesState extends State<ItemBoxes> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
           width: 185,
-          height: 10,
+          height: 200,
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.grey.shade100,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
-            child: Image(
-              image: AssetImage(
-                widget.image,
-                
-              ),
+            child: Image.asset(
+              image,
+              fit: BoxFit.cover,
             ),
           ),
         ),
         const SizedBox(height: 8),
-        Text(widget.title),
+        Text(title),
+        Text('\$${price.toString()}'),
       ],
     );
   }

@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_appk/products_page.dart';
+import 'products_database.dart';
+import 'widgets/item_boxes.dart';
 
-class HomeContent extends StatelessWidget {
+// ignore: must_be_immutable
+class HomeContent extends StatefulWidget {
+  const HomeContent({super.key});
+
+  @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
   List<String> categories = [
     'All',
     'Handbags',
@@ -8,9 +19,8 @@ class HomeContent extends StatelessWidget {
     'Jewellery',
     'Shoes',
   ];
-  String selectedCategory = "All";
 
-  HomeContent({super.key});
+  String selectedCategory = "All";
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,9 @@ class HomeContent extends StatelessWidget {
                     label: Text(categories[index]),
                     selected: selectedCategory == categories[index],
                     onSelected: (bool selected) {
-                      selectedCategory = categories[index];
+                      setState(() {
+                        selectedCategory = categories[index];
+                      });
                     },
                     selectedColor: Colors.black,
                     labelStyle: TextStyle(
@@ -80,13 +92,57 @@ class HomeContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 25,
+            height: 10,
           ),
-          const Text(
-            'New Collections',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'New Collections',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProductsPage()),
+                  );
+                },
+                child: const Text(
+                  'See more',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                childAspectRatio: 0.65,
+              ),
+              itemCount: products.length > 4 ? 4 : products.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: ItemBoxes(
+                    image: products[index]['image'] as String,
+                    title: products[index]['title'] as String,
+                    price: products[index]['price'] as int,
+                  ),
+                );
+              },
             ),
           ),
         ],

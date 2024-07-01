@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_appk/products_page.dart';
+import 'product_details_sheet.dart';
 import 'products_database.dart';
 import 'widgets/item_boxes.dart';
 
@@ -136,10 +137,20 @@ class _HomeContentState extends State<HomeContent> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: ItemBoxes(
-                    image: products[index]['image'] as String,
-                    title: products[index]['title'] as String,
-                    price: products[index]['price'] as int,
+                  child: GestureDetector(
+                    onTap: (){
+                      showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ProductDetailsSheet(product: products[index]);
+                     },
+                );
+              },
+                    child: ItemBoxes(
+                      image: products[index]['image'] as String,
+                      title: products[index]['title'] as String,
+                      price: products[index]['price'] as int,
+                    ),
                   ),
                 );
               },

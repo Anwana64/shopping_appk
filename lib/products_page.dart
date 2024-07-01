@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'product_details_sheet.dart';
 import 'products_database.dart';
 import 'widgets/item_boxes.dart';
 
@@ -18,10 +19,20 @@ class ProductsPage extends StatelessWidget {
             childAspectRatio: 0.65,
           ),
           itemBuilder: (context, index) {
-            return ItemBoxes(
-              image: products[index]['image'] as String,
-              title: products[index]['title'] as String,
-              price: products[index]['price'] as int, 
+            return GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ProductDetailsSheet(product: products[index]);
+                  },
+                );
+              },
+              child: ItemBoxes(
+                image: products[index]['image'] as String,
+                title: products[index]['title'] as String,
+                price: products[index]['price'] as int,
+              ),
             );
           },
           itemCount: products.length,

@@ -22,6 +22,7 @@ class ProductsPage extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 showModalBottomSheet(
+                  
                   context: context,
                   builder: (BuildContext context) {
                     return ProductDetailsSheet(product: products[index]);

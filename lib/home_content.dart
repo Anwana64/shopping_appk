@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'product_details_sheet.dart';
 import 'products_database.dart';
 import 'products_page.dart';
 import 'widgets/item_boxes.dart';
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   final Function(Map<String, dynamic>) addToCart;
 
   const HomeContent({super.key, required this.addToCart});
 
   @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  List<String> categories = [
+    'All',
+    'Handbags',
+    'Dresses',
+    'Jewellery',
+    'Shoes',
+  ];
+
+  String selectedCategory = "All";
+
+  @override
   Widget build(BuildContext context) {
-    List<String> categories = [
-      'All',
-      'Handbags',
-      'Dresses',
-      'Jewellery',
-      'Shoes',
-    ];
-
-    String selectedCategory = "All";
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
       child: Column(
@@ -28,7 +34,9 @@ class HomeContent extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
+              SizedBox(
+                width: 275,
+                height: 50,
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Enter search term',
@@ -73,7 +81,9 @@ class HomeContent extends StatelessWidget {
                     label: Text(categories[index]),
                     selected: selectedCategory == categories[index],
                     onSelected: (bool selected) {
-                      selectedCategory = categories[index];
+                      setState(() {
+                        selectedCategory = categories[index];
+                      });
                     },
                     selectedColor: Colors.black,
                     labelStyle: TextStyle(
@@ -105,7 +115,8 @@ class HomeContent extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProductsPage(addToCart: addToCart)),
+                      builder: (context) => ProductsPage(addToCart: widget.addToCart),
+                    ),
                   );
                 },
                 child: const Text(
@@ -132,13 +143,13 @@ class HomeContent extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
                           return ProductDetailsSheet(
                             product: products[index],
-                            addToCart: addToCart,
+                            addToCart: widget.addToCart,
                           );
                         },
                       );

@@ -4,7 +4,9 @@ import 'products_database.dart';
 import 'widgets/item_boxes.dart';
 
 class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
+  final Function(Map<String, dynamic>) addToCart;
+
+  const ProductsPage({super.key, required this.addToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,12 @@ class ProductsPage extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 showModalBottomSheet(
-                  
                   context: context,
                   builder: (BuildContext context) {
-                    return ProductDetailsSheet(product: products[index]);
+                    return ProductDetailsSheet(
+                      product: products[index],
+                      addToCart: addToCart,
+                    );
                   },
                 );
               },

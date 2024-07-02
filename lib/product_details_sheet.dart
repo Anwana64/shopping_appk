@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProductDetailsSheet extends StatelessWidget {
   final Map<String, dynamic> product;
+  final Function(Map<String, dynamic>) addToCart;
 
-  const ProductDetailsSheet({super.key, required this.product});
+  const ProductDetailsSheet({super.key, required this.product, required this.addToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,10 @@ class ProductDetailsSheet extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                addToCart(product);
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(

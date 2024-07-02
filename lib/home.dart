@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'package:shopping_appk/home_content.dart';
-import 'package:shopping_appk/products_page.dart';
-
 import 'cart_page.dart';
+import 'home_content.dart';
+import 'products_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,12 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
-  static final List<Widget>  _widgetOptions = <Widget>[
-     HomeContent(),
-    const ProductsPage(),
-    const CartPage(),
-  ];
+  final List<Map<String, dynamic>> _cartItems = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -27,11 +20,27 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _addToCart(Map<String, dynamic> product) {
+    setState(() {
+      _cartItems.add(product);
+    });
+  }
+
+  void _removeFromCart(Map<String, dynamic> product) {
+    setState(() {
+      _cartItems.remove(product);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: [
+          HomeContent(addToCart: _addToCart),
+          ProductsPage(addToCart: _addToCart),
+          CartPage(cartItems: _cartItems, removeFromCart: _removeFromCart),
+        ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

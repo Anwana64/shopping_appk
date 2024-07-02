@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_appk/products_page.dart';
 import 'product_details_sheet.dart';
 import 'products_database.dart';
+import 'products_page.dart';
 import 'widgets/item_boxes.dart';
 
-// ignore: must_be_immutable
-class HomeContent extends StatefulWidget {
-  const HomeContent({super.key});
+class HomeContent extends StatelessWidget {
+  final Function(Map<String, dynamic>) addToCart;
 
-  @override
-  State<HomeContent> createState() => _HomeContentState();
-}
-
-class _HomeContentState extends State<HomeContent> {
-  List<String> categories = [
-    'All',
-    'Handbags',
-    'Dresses',
-    'Jewellery',
-    'Shoes',
-  ];
-
-  String selectedCategory = "All";
+  const HomeContent({super.key, required this.addToCart});
 
   @override
   Widget build(BuildContext context) {
+    List<String> categories = [
+      'All',
+      'Handbags',
+      'Dresses',
+      'Jewellery',
+      'Shoes',
+    ];
+
+    String selectedCategory = "All";
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
       child: Column(
@@ -77,9 +73,7 @@ class _HomeContentState extends State<HomeContent> {
                     label: Text(categories[index]),
                     selected: selectedCategory == categories[index],
                     onSelected: (bool selected) {
-                      setState(() {
-                        selectedCategory = categories[index];
-                      });
+                      selectedCategory = categories[index];
                     },
                     selectedColor: Colors.black,
                     labelStyle: TextStyle(
@@ -111,7 +105,7 @@ class _HomeContentState extends State<HomeContent> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ProductsPage()),
+                        builder: (context) => ProductsPage(addToCart: addToCart)),
                   );
                 },
                 child: const Text(
@@ -140,12 +134,15 @@ class _HomeContentState extends State<HomeContent> {
                   child: GestureDetector(
                     onTap: (){
                       showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ProductDetailsSheet(product: products[index]);
-                     },
-                );
-              },
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ProductDetailsSheet(
+                            product: products[index],
+                            addToCart: addToCart,
+                          );
+                        },
+                      );
+                    },
                     child: ItemBoxes(
                       image: products[index]['image'] as String,
                       title: products[index]['title'] as String,
